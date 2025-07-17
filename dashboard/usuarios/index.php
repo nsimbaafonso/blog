@@ -8,7 +8,6 @@
     <link href="../assets/fonts/fontawesome-6.5.2/css/brands.css?<?= time(); ?>" rel="stylesheet">
     <link href="../assets/fonts/fontawesome-6.5.2/css/solid.css?<?= time(); ?>" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css?<?= time(); ?>">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="container">
@@ -46,21 +45,6 @@
                     <div class="title">Usuários inativos</div>
                 </div>
                 <div class="icon"><i class="fas fa-user-slash"></i></div>
-            </div>
-        </section>
-
-        <!--charts-->
-        <section class="charts">
-            <div class="chart-container w-100">
-                <div class="chart-header">
-                    <h3>Usuários do Site</h3>
-                    <select>
-                      <option>Últimos 7 dias</option>
-                      <option>Últimos 30 dias</option>
-                      <option>Este ano</option>
-                    </select>
-                </div>
-                <canvas id="usuariosChart"></canvas>
             </div>
         </section>
 
@@ -176,6 +160,5 @@
     </div>
 
     <script type="text/javascript" src="../assets/js/script.js"></script>
-    <script type="text/javascript" src="../assets/js/usuariosChart.js"></script>
 </body>
 </html>
