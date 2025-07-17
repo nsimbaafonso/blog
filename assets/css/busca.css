@@ -1,0 +1,35 @@
+@charset "UTF-8";
+/*busca*/
+.busca{
+    background: url(../img/busca.jpg) no-repeat;
+    background-position: center !important;
+    background-size: cover !important;
+    display: flex;
+    align-items: center;
+    z-index: 0;
+    position: relative;
+    min-height: 50vh;
+}
+.busca::before{
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-color: rgba(0, 0, 0, .7);
+}
+.busca .content{
+    max-width: 55rem;
+}
+.busca .content h3{
+    font-size: 5rem;
+    color: var(--white);
+}
+.busca .content p{
+    font-size: 1.6rem;
+    color: var(--white);
+    line-height: 2;
+    padding: 1rem 0;
+}
+/*busca end*/

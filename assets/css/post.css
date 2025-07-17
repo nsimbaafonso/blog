@@ -1,0 +1,71 @@
+@charset "UTF-8";
+
+.post-read h1{
+    font-size: 4rem;
+    margin: 2rem 0;
+    line-height: 2;
+    color: var(--black);
+    text-align: center;
+}
+.post-read .data{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    margin: 2rem 0;
+    gap: 1.5rem;
+}
+.post-read .data span i{
+    font-size: 1.6rem;
+    color: var(--primary);
+}
+.post-read .data span{
+    font-size: 1.6rem;
+    color: var(--black);
+}
+.post-read .post-img{
+    margin: 0 auto;
+    max-width: 500px;
+}
+.post-read .post-img img{
+    width: 100%;
+    object-fit: cover;
+}
+.totais{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 2rem 0;
+    gap: 1.5rem;
+}
+.totais .total{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+.totais .total i{
+    font-size: 2rem;
+    color: var(--primary);
+}
+.totais .total p{
+    font-size: 1.6rem;
+    color: var(--black);
+}
+.post-read p{
+    font-size: 1.7rem;
+    line-height: 1.5;
+    color: var(--black);
+    margin: 2rem 0;
+}
+
+@media(max-width: 992px){
+    .post-read h1{
+        font-size: 3.5rem;
+    }
+}
+@media(max-width: 768px){
+    .post-read h1{
+        font-size: 3rem;
+    }
+}

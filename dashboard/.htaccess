@@ -1,0 +1,21 @@
+# Ativar o mod_rewrite
+RewriteEngine On
+RewriteBase /blog/dashboard
+
+# Bloquear acesso a pastas sem index
+Options -Indexes
+
+# Redirecionamento de erros para o site
+ErrorDocument 400 /blog/dashboard/400.php
+ErrorDocument 401 /blog/dashboard/401.php
+ErrorDocument 403 /blog/dashboard/403.php
+ErrorDocument 404 /blog/dashboard/erro/404.php
+ErrorDocument 500 /blog/dashboard/erro/500.php
+ErrorDocument 503 /blog/dashboard/503.php
+
+# URLs amigáveis (remove .php e .html da URL)
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(.+?)/?$ $1.php [L]
+
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^(.+?)/?$ $1.html [L]
