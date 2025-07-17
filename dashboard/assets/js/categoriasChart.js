@@ -1,4 +1,4 @@
-// 1. Visitas ao Blog
+// 1. Visitas por post ao Blog
 let categoriasChart;
 
 function carregarGraficoCategorias() {
