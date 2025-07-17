@@ -3,7 +3,7 @@ session_start();
 include __DIR__ . '/../../config/db.php';
 include __DIR__ . '/../../includes/functions.php';
 
-$post = null;
+$categoria = null;
 
 if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     $id = intval($_GET['id']);
@@ -17,7 +17,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $categoria = $result->fetch_assoc();
     }
 } else {
-    redirect("http://localhost/blog/dashboard/posts/");
+    redirect("http://localhost/blog/dashboard/categorias/");
 }
 
 ?>
