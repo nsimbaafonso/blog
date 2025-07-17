@@ -3,6 +3,22 @@ session_start();
 include __DIR__ . '/../../config/db.php';
 include __DIR__ . '/../../includes/functions.php';
 
+$newsletter = null;
+
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $id = intval($_GET['id']);
+
+    $sql = "SELECT email, status FROM newsletter WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $id);
+
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $newsletter = $result->fetch_assoc();
+    }
+} else {
+    redirect("http://localhost/blog/dashboard/newsletter/");
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-ao">
@@ -32,19 +48,28 @@ include __DIR__ . '/../../includes/functions.php';
 
         <!--form-->
         <section class="section-form">
-            <form class="form" id="form">
+            <?php
+                if (isset($_SESSION['msgs'])) {
+                    foreach ($_SESSION['msgs'] as $msg) {
+                        echo $msg;
+                    }
+                    unset($_SESSION['msgs']);
+                }
+            ?>
+            <form action="actions/update" method="POST" class="form" id="form">
                 <h3>Editar Newsletter</h3>
+                <input type="hidden" name="idnewsletter" value="<?= $id ?>">
                 <div class="inputBox">
                     <div>
-                        <input type="email" name="email" placeholder="exemplo@gmail.com"  class="box" required>
+                        <input type="email" name="email" placeholder="exemplo@gmail.com"  class="box" value="<?= htmlspecialchars($newsletter['email']) ?>">
                     </div>
                 </div>
 
                 <div class="inputBox">
-                    <select name="cat" id="cat" class="box">
+                    <select name="status" id="status" class="box">
                         <option value="" disabled selected>-- Selecione um status --</option>
-                        <option value="0">Inativo</option>
-                        <option value="1">Ativo</option>
+                        <option value="ativo" <?= $newsletter['status'] == 'ativo' ? 'selected' : '' ?>>Ativo</option>
+                        <option value="inativo" <?= $newsletter['status'] == 'inativo' ? 'selected' : '' ?>>Inativo</option>
                     </select>
                 </div>
 
