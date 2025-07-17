@@ -2,7 +2,7 @@
 session_start();
 include __DIR__ . '/../../config/db.php';
 include __DIR__ . '/../../includes/functions.php';
-
+include 'actions/read.php';
 ?>
 <!DOCTYPE html>
 <html lang="pt-ao">
@@ -34,21 +34,21 @@ include __DIR__ . '/../../includes/functions.php';
         <section class="cards">
             <div class="card">
                 <div class="content">
-                    <div class="numbers">20</div>
+                    <div class="numbers"><?= $totalNewletters ?></div>
                     <div class="title">Newsletter</div>
                 </div>
                 <div class="icon"><i class="fas fa-envelope"></i></div>
             </div>
             <div class="card">
                 <div class="content">
-                    <div class="numbers">20</div>
+                    <div class="numbers"><?= $totalAtivos ?></div>
                     <div class="title">Newsletter ativos</div>
                 </div>
                 <div class="icon"><i class="fas fa-check-circle"></i></div>
             </div>
             <div class="card">
                 <div class="content">
-                    <div class="numbers">20</div>
+                    <div class="numbers"><?= $totalInativos ?></div>
                     <div class="title">Newsletter inativos</div>
                 </div>
                 <div class="icon"><i class="fas fa-eye-slash"></i></div>
@@ -72,13 +72,14 @@ include __DIR__ . '/../../includes/functions.php';
 
         <!--section-search-->
         <section class="section-search">
-            <form action="" class="search-form">
+            <form action="javascript:void(0)" class="search-form">
                 <input type="search" name="tbusca" id="search-box" placeholder="Busque aqui..." required>
                 <button type="submit" class="fas fa-search" title="Pesquisar"></button>
             </form>
         </section>
 
         <!--table-->
+        <?php if(!empty($newsletters)): ?>
         <section class="table-section">
             <table>
                 <caption>Newsletter cadastrados</caption>
@@ -86,55 +87,81 @@ include __DIR__ . '/../../includes/functions.php';
                     <tr>
                         <th>Email</th>
                         <th>Status</th>
+                        <th>Criado</th>
+                        <th>Atualizado</th>
                         <th colspan="2">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
+                    <?php foreach ($newsletters as $newsletter): ?>
                     <tr>
-                        <td>mateus@gmail.com</td>
-                        <td><span class="status ativo">Ativo</span></td>
-                        <td><a href="editar" class="btn fas fa-pen" title="Editar"></a></td>
-                        <td><a href="eliminar" class="btn fas fa-trash delete" title="Eliminar"></a></td>
+                        <td><?= htmlspecialchars($newsletter['email']) ?></td>
+                        <td>
+                            <span class="status <?= $newsletter['status'] === 'ativo' ? 'ativo' : 'inativo' ?>">
+                                <?= ucfirst($newsletter['status']) ?>
+                            </span>
+                        </td>
+
+                        <td><?= DataHora(htmlspecialchars($newsletter['criado_em'])) ?></td>
+                        <td><?= DataHora(htmlspecialchars($newsletter['atualizado_em'])) ?></td>
+                        <td><a href="editar?id=<?= $newsletter['id'] ?>" class="btn fas fa-pen" title="Editar"></a></td>
+                        <td><a href="eliminar?id=<?= $newsletter['id'] ?>" class="btn fas fa-trash delete" title="Eliminar"></a></td>
                     </tr>
-                    <tr>
-                        <td>joao@gmail.com</td>
-                        <td><span class="status inativo">Inativo</span></td>
-                        <td><a href="editar" class="btn fas fa-pen" title="Editar"></a></td>
-                        <td><a href="eliminar" class="btn fas fa-trash delete" title="Eliminar"></a></td>
-                    </tr>
-                    <tr>
-                        <td>nelson@gmail.com</td>
-                        <td><span class="status ativo">Ativo</span></td>
-                        <td><a href="editar" class="btn fas fa-pen edit" title="Editar"></a></td>
-                        <td><a href="eliminar" class="btn fas fa-trash delete" title="Eliminar"></a></td>
-                    </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
 
-            <div class="pagination">
-              <a href="#" class="page-btn" title="Anterior"><i class="fas fa-chevron-left"></i></a>
-              <a href="#" class="page-btn active">1</a>
-              <a href="#" class="page-btn">2</a>
-              <a href="#" class="page-btn">3</a>
-              <a href="#" class="page-btn" title="Próximo"><i class="fas fa-chevron-right"></i></a>
+            <div class="pagination" id="pagination">
+                <?php if ($pagina > 1): ?>
+                    <a href="?pagina=<?= $pagina - 1 ?>" class="page-btn" title="Anterior">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                <?php endif; ?>
+
+                <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>
+                    <a href="?pagina=<?= $i ?>" class="page-btn <?= $i == $pagina ? 'active' : '' ?>">
+                        <?= $i ?>
+                    </a>
+                <?php endfor; ?>
+
+                <?php if ($pagina < $totalPaginas): ?>
+                    <a href="?pagina=<?= $pagina + 1 ?>" class="page-btn" title="Próximo">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                <?php endif; ?>
             </div>
         </section>
+        <?php else: ?>
+            <section class="table-section">
+                <p class="none">Newsletters não encontrados</p>
+            </section> 
+        <?php endif; ?>
 
         <!--form-->
         <section class="section-form">
-            <form action="" method="POST" class="form" id="form">
+            <?php
+                if (isset($_SESSION['msgs'])) {
+                    foreach ($_SESSION['msgs'] as $msg) {
+                        echo $msg;
+                    }
+                    unset($_SESSION['msgs']);
+                }
+                $formData = $_SESSION['form_data'] ?? [];
+                unset($_SESSION['form_data']);
+            ?>
+            <form action="actions/create" method="POST" class="form" id="form">
                 <h3>Cadastrar Newsletter</h3>
                 <div class="inputBox">
                     <div>
-                        <input type="email" name="email" placeholder="exemplo@gmail.com"  class="box" required>
+                        <input type="email" name="email" placeholder="exemplo@gmail.com"  class="box" value="<?= htmlspecialchars($formData['email'] ?? '') ?>">
                     </div>
                 </div>
 
                 <div class="inputBox">
-                    <select name="cat" id="cat" class="box">
-                        <option value="" disabled selected>-- Selecione um status --</option>
-                        <option value="0">Inativo</option>
-                        <option value="1">Ativo</option>
+                    <select name="status" id="status" class="box">
+                        <option value="" disabled <?= empty($formData['status']) ? 'selected' : '' ?>>-- Selecione um status --</option>
+                        <option value="ativo" <?= ($formData['status'] ?? '') === 'ativo' ? 'selected' : '' ?>>Ativo</option>
+                        <option value="inativo" <?= ($formData['status'] ?? '') === 'inativo' ? 'selected' : '' ?>>Inativo</option>
                     </select>
                 </div>
 
@@ -146,6 +173,53 @@ include __DIR__ . '/../../includes/functions.php';
     </div>
 
     <script type="text/javascript" src="../assets/js/script.js"></script>
-    <script type="text/javascript" src="../assets/js/newsletterChart.js"></script>
+    <script type="text/javascript" src="../assets/js/newsletterChart.js?<?= time(); ?>"></script>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchBox = document.getElementById('search-box');
+            const pagination = document.getElementById('pagination');
+
+            searchBox.addEventListener('keyup', function () {
+                const query = this.value.trim();
+
+                if (query === '') {
+                    pagination.style.display = 'block'; 
+                    location.reload() ;
+                    return;
+                }
+
+                pagination.style.display = 'none';
+
+                fetch(`actions/search.php?query=${encodeURIComponent(query)}`)
+                    .then(response => response.json())
+                    .then(newsletters => {
+                        const tbody = document.querySelector('table tbody');
+                        tbody.innerHTML = '';
+
+                        if (newsletters.length === 0) {
+                            tbody.innerHTML = '<tr><td colspan="6">Nenhum resultado encontrado.</td></tr>';
+                            return;
+                        }
+
+                        newsletters.forEach(newsletter => {
+                            const row = `
+                                <tr>
+                                    <td>${newsletter.email}</td>
+                                    <td><span class="status ${newsletter.status === 'ativo' ? 'ativo' : 'inativo'}">${newsletter.status.charAt(0).toUpperCase() + newsletter.status.slice(1)}</span></td>
+                                    <td>${newsletter.criado_em}</td>
+                                    <td>${newsletter.atualizado_em}</td>
+                                    <td><a href="editar?id=${newsletter.id}" class="btn fas fa-pen" title="Editar"></a></td>
+                                    <td><a href="eliminar?id=${newsletter.id}" class="btn fas fa-trash delete" title="Eliminar"></a></td>
+                                </tr>
+                            `;
+                            tbody.insertAdjacentHTML('beforeend', row);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Erro ao buscar:', error);
+                    });
+            });
+        });
+    </script>
 </body>
 </html>
