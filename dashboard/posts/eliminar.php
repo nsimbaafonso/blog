@@ -21,7 +21,6 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 }
 
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-ao">
 <head>
