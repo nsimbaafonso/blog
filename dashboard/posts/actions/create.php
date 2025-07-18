@@ -82,6 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
             if ($stmt->execute()) {
                 setFlashMessage("Post cadastrado com sucesso.", "success", "fas fa-check-circle");
+                $_SESSION['form_data'] = "";
                 redirect("http://localhost/blog/dashboard/posts/#form");
             } else {
                 setFlashMessage("Erro ao cadastrar post.");

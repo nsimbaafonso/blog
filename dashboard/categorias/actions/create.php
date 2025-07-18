@@ -56,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
         if ($stmt->execute()) {
             setFlashMessage("Categoria cadastrado com sucesso.", "success", "fas fa-check-circle");
+            $_SESSION['form_data'] = "";
             redirect("http://localhost/blog/dashboard/categorias/#form");
         } else {
             setFlashMessage("Erro ao cadastrar categoria.");

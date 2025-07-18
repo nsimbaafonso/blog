@@ -51,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
         if ($stmt->execute()) {
             setFlashMessage("Newsletter cadastrado com sucesso.", "success", "fas fa-check-circle");
+            $_SESSION['form_data'] = "";
             redirect("http://localhost/blog/dashboard/newsletter/#form");
         } else {
             setFlashMessage("Erro ao cadastrar newsletter.");
