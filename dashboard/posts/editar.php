@@ -67,7 +67,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                 <input type="hidden" name="idpost" value="<?= $id ?>">
                 <div class="inputBox">
                     <div>
-                        <input type="text" name="titulo" placeholder="Título do post"  class="box" required value="<?= htmlspecialchars($post['titulo']) ?>">
+                        <input type="text" name="titulo" placeholder="Título do post"  class="box" value="<?= htmlspecialchars($post['titulo']) ?>">
                     </div>
                 </div>
 
@@ -95,7 +95,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                 </div>
 
                 <div class="inputBox">
-                    <textarea name="texto" placeholder="Texto do post" cols="30" rows="10" required>
+                    <textarea name="texto" placeholder="Texto do post" cols="30" rows="10">
                         <?= htmlspecialchars($post['texto']) ?>
                     </textarea>
                 </div>
