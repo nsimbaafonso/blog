@@ -1,3 +1,26 @@
+<?php 
+session_start();
+include __DIR__ . '/../../config/db.php';
+include __DIR__ . '/../../includes/functions.php';
+
+$usuario = null;
+
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $id = intval($_GET['id']);
+
+    $sql = "SELECT nome, sobrenome FROM usuario WHERE id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $id);
+
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        $usuario = $result->fetch_assoc();
+    }
+} else {
+    redirect("/blog/dashboard/usuarios/");
+}
+
+?>
 <!DOCTYPE html>
 <html lang="pt-ao">
 <head>
@@ -25,10 +48,10 @@
 
         <!--form-->
         <section class="section-form">
-            <form class="form" id="form">
+            <form action="actions/delete" method="POST" class="form" id="form">
                 <h3>Eliminar Usuário?</h3>
-                <p>Tem a certeza que deseja eliminar o usuário?</p>
-                <input type="hidden" name="" value="" required>
+                <p>Tem a certeza que deseja eliminar o usuário <?= $usuario["nome"]?> <?= $usuario["sobrenome"]?>?</p>
+                <input type="hidden" name="idusuario" value="<?= $id ?>">
                 <div class="d-flex-2">
                     <a href="/blog/dashboard/usuarios" class="btn">Cancelar</a>
                     <button type="submit" class="btn red">Eliminar Usuário</button>
